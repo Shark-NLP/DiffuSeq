@@ -1,0 +1,15 @@
+bert_score
+blobfile
+nltk
+numpy
+packaging
+psutil
+PyYAML
+setuptools
+spacy
+torch==1.9.0+cu111
+torchmetrics
+tqdm
+transformers==4.22.2
+wandb
+datasets
