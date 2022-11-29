@@ -72,6 +72,7 @@ def load_model_emb(args, tokenizer):
     ### random emb or pre-defined embedding like glove embedding. You can custome your own init here.
     model = torch.nn.Embedding(tokenizer.vocab_size, args.hidden_dim)
     path_save = '{}/random_emb.torch'.format(args.checkpoint_path)
+    path_save_ind = path_save + ".done"
     if int(os.environ['LOCAL_RANK']) == 0:
         if os.path.exists(path_save):
             print('reload the random embeddings', model)
@@ -80,8 +81,11 @@ def load_model_emb(args, tokenizer):
             print('initializing the random embeddings', model)
             torch.nn.init.normal_(model.weight)
             torch.save(model.state_dict(), path_save)
+            os.sync()
+            with open(path_save_ind, "x") as _:
+                pass
     else:
-        while not os.path.exists(path_save):
+        while not os.path.exists(path_save_ind):
             time.sleep(1)
         print('reload the random embeddings', model)
         model.load_state_dict(torch.load(path_save))
