@@ -11,7 +11,7 @@ from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 import nltk
 
 def get_bleu(recover, reference):
-    return sentence_bleu([recover.split()], reference.split(), smoothing_function=SmoothingFunction().method4,)
+    return sentence_bleu([reference.split()], recover.split(), smoothing_function=SmoothingFunction().method4,)
 
 def selectBest(sentences):
     selfBleu = [[] for i in range(len(sentences))]
@@ -23,9 +23,6 @@ def selectBest(sentences):
         selfBleu[i][i] = 0
     idx = np.argmax(np.sum(selfBleu, -1))
     return sentences[idx]
-
-def get_bleu(recover, reference):
-    return sentence_bleu([recover.split()], reference.split(), smoothing_function=SmoothingFunction().method4,)
 
 def diversityOfSet(sentences):
     selfBleu = []
