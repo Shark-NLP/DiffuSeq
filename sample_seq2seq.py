@@ -72,10 +72,11 @@ def main():
     model.eval().requires_grad_(False).to(dist_util.dev())
 
     tokenizer = load_tokenizer(args)
-    model_emb, tokenizer = load_model_emb(args, tokenizer)
-
-    model_emb.weight = th.nn.Parameter(model.word_embedding.weight.clone().cpu())
-    model_emb_copy = get_weights(model_emb, args).eval().requires_grad_(False)
+    model_emb = th.nn.Embedding(
+        num_embeddings=tokenizer.vocab_size, 
+        embedding_dim=args.hidden_dim, 
+        _weight=model.word_embedding.weight.clone().cpu()
+    ).eval().requires_grad_(False)
 
     set_seed(args.seed2)
 
