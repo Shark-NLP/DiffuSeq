@@ -11,7 +11,7 @@ import numpy as np
 import torch as th
 import torch.distributed as dist
 from transformers import set_seed
-from diffuseq.rounding import denoised_fn_round, get_weights
+from diffuseq.rounding import denoised_fn_round
 from diffuseq.text_datasets import load_data_text
 
 # from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
@@ -24,7 +24,6 @@ from basic_utils import (
     create_model_and_diffusion,
     add_dict_to_argparser,
     args_to_dict,
-    load_model_emb,
     load_tokenizer
 )
 
@@ -125,6 +124,8 @@ def main():
     except StopIteration:
         print('### End of reading iteration...')
 
+    model_emb.to(dist_util.dev())
+
     if idx % world_size and rank >= idx % world_size:
         all_test_data.append({})  # Dummy data for Remainder : for dist.barrier()
 
@@ -170,7 +171,7 @@ def main():
             sample_shape,
             noise=x_noised,
             clip_denoised=args.clip_denoised,
-            denoised_fn=partial(denoised_fn_round, args, model_emb_copy.to(dist_util.dev())),
+            denoised_fn=partial(denoised_fn_round, args, model_emb),
             model_kwargs=model_kwargs,
             top_p=args.top_p,
             clamp_step=args.clamp_step,
@@ -179,8 +180,6 @@ def main():
             x_start=x_start,
             gap=step_gap
         )
-
-        model_emb_copy.cpu()
 
         # print(samples[0].shape) # samples for each step
 
