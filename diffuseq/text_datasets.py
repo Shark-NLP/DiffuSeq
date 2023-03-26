@@ -17,6 +17,7 @@ def load_data_text(
     split='train', 
     loaded_vocab=None,
     loop=True,
+    seed=None,  # ADD THIS
 ):
     """
     For a dataset, create a generator over (seqs, kwargs) pairs.
@@ -32,6 +33,7 @@ def load_data_text(
     :param model_emb: loaded word embeddings.
     :param loaded_vocab: loaded word vocabs.
     :param loop: loop to get batch data or not.
+    :param seed: (optional) add seed to get different samples per node.
     """
 
     print('#'*30, '\nLoading text data...')
@@ -44,12 +46,19 @@ def load_data_text(
         model_emb=model_emb
     )
 
+    if seed is not None:
+        batch_generator = torch.Generator()
+        batch_generator.manual_seed(hash(seed) + int(os.environ.get("LOCAL_RANK", "0")))
+    else:
+        batch_generator = None
+
     data_loader = DataLoader(
         dataset,
         batch_size=batch_size,  # 20,
         # drop_last=True,
         shuffle=not deterministic,
         num_workers=0,
+        generator=batch_generator,  # ADDED
     )
     if loop:
         return infinite_loader(data_loader)
