@@ -46,7 +46,8 @@ def main():
         seq_len=args.seq_len,
         data_args = args,
         loaded_vocab=tokenizer,
-        model_emb=model_weight # use model's weights as init
+        model_emb=model_weight,  # use model's weights as init
+        seed=args.seed,
     )
     next(data)
 
@@ -57,7 +58,8 @@ def main():
         split='valid',
         deterministic=True,
         loaded_vocab=tokenizer,
-        model_emb=model_weight # using the same embedding wight with tranining data
+        model_emb=model_weight,  # using the same embedding wight with tranining data
+        seed=args.seed,
     )
 
     print('#'*30, 'size of vocab', args.vocab_size)
