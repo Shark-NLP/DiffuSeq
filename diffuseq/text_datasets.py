@@ -1,6 +1,7 @@
 # import blobfile as bf
 import numpy as np
 from torch.utils.data import DataLoader, Dataset
+from torch.utils.data.distributed import DistributedSampler
 
 import torch
 import json
@@ -44,13 +45,26 @@ def load_data_text(
         model_emb=model_emb
     )
 
-    data_loader = DataLoader(
-        dataset,
-        batch_size=batch_size,  # 20,
-        # drop_last=True,
-        shuffle=not deterministic,
-        num_workers=0,
-    )
+    if split != 'test':
+        sampler = DistributedSampler(dataset)
+        data_loader = DataLoader(
+            dataset,
+            batch_size=batch_size,  # 20,
+            # drop_last=True,
+            sampler=sampler,
+            # shuffle=not deterministic,
+            num_workers=4,
+        )
+    else:
+        data_loader = DataLoader(
+            dataset,
+            batch_size=batch_size,  # 20,
+            # drop_last=True,
+            # sampler=sampler,
+            shuffle=not deterministic,
+            num_workers=4,
+        )
+
     if loop:
         return infinite_loader(data_loader)
     else:
@@ -162,8 +176,9 @@ def get_corpus(data_args, seq_len, split='train', loaded_vocab=None):
 
     with open(path, 'r') as f_reader:
         for row in f_reader:
-            sentence_lst['src'].append(json.loads(row)['src'].strip())
-            sentence_lst['trg'].append(json.loads(row)['trg'].strip())
+            content = json.loads(row)
+            sentence_lst['src'].append(content['src'].strip())
+            sentence_lst['trg'].append(content['trg'].strip())
 
     print('### Data samples...\n', sentence_lst['src'][:2], sentence_lst['trg'][:2])
         
