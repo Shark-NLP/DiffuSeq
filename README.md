@@ -87,6 +87,7 @@ python eval_seq2seq.py --folder ../{your-path-to-outputs} --mbr
 Note: if you want to use this evaluation script for output files from other models, please make sure the same line from these output files refers to the same piece of data. Otherwise the diversity score could be incorrect.
 
 ## Update
+- Update 22 May 2023: We prepare the checkpoint and sampling results for remaining tasks in this [link](https://drive.google.com/drive/folders/1lHPp-T-ytp-YVptiokeYK-Lth48EGQ12?usp=sharing).
 - Update 28 Nov 2022: We prepare the checkpoint and sampling results of 10 seeds for QQP dataset in this [link](https://drive.google.com/drive/folders/1vnhJIUqPQva_x_sH2h5a0moCc1NYmEpr?usp=sharing).
 - Update 14 Feb 2023: We update the evaluation scripts and camera ready version of the paper.
 
@@ -103,3 +104,9 @@ Please add the citation if our paper or code helps you.
   year = 2023
 }
 ```
+<p align = "center">
+<img src="img/DiffuSeq_poster.png" width="100%" alt="" align=center />
+</p>
+<p align = "center">
+DiffuSeq poster for ICLR 2023.
+</p>
