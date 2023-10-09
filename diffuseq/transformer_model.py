@@ -38,6 +38,7 @@ class TransformerNetModel(nn.Module):
         vocab_size=None,
         init_pretrained='no',
         logits_mode=1,
+        learned_mean_embed=False,
     ):
         super().__init__()
 
@@ -102,6 +103,12 @@ class TransformerNetModel(nn.Module):
         if self.output_dims != config.hidden_size:
             self.output_down_proj = nn.Sequential(nn.Linear(config.hidden_size, config.hidden_size),
                                                 nn.Tanh(), nn.Linear(config.hidden_size, self.output_dims))
+
+        if learned_mean_embed:
+            self.mean_embed = nn.Parameter(th.randn(input_dims))
+            nn.init.normal_(self.mean_embed, mean=0, std=input_dims ** -0.5)
+        else:
+            self.mean_embed = None
 
     def get_embeds(self, input_ids):
         return self.word_embedding(input_ids)

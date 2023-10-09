@@ -14,6 +14,7 @@ from transformers import set_seed
 from diffuseq.rounding import denoised_fn_round, get_weights
 from diffuseq.text_datasets import load_data_text
 from torch.cuda.amp import autocast
+
 # from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 
 import time
@@ -38,16 +39,11 @@ def create_argparser():
     return parser
 
 
-@th.no_grad()
 def main():
-    CUDA_VISIBLE_DEVICES = int(os.environ["LOCAL_RANK"])
     args = create_argparser().parse_args()
 
     dist_util.setup_dist()
     logger.configure()
-
-    world_size = dist.get_world_size() or 1
-    rank = dist.get_rank() or 0
 
     # load configurations.
     config_path = os.path.join(os.path.split(args.model_path)[0], "training_args.json")
@@ -57,33 +53,30 @@ def main():
         training_args = json.load(f)
     training_args['batch_size'] = args.batch_size
     args.__dict__.update(training_args)
-    args.device = f"cuda:{CUDA_VISIBLE_DEVICES}"
 
     logger.log("### Creating model and diffusion...")
+    args.device = dist_util.dev()
+    # args.denoise_rate = 0.0
+    print('#'*10, args.clamp_step)
     model, diffusion = create_model_and_diffusion(
         **args_to_dict(args, load_defaults_config().keys())
     )
 
     model.load_state_dict(
-        dist_util.load_state_dict(args.model_path, False, "model", map_location="cpu")
+        dist_util.load_state_dict(args.model_path, False, "amp", map_location="cpu")
     )
 
     pytorch_total_params = sum(p.numel() for p in model.parameters())
     logger.log(f'### The parameter count is {pytorch_total_params}')
 
-    model.eval().requires_grad_(False).to(dist_util.dev())
+    model.to(dist_util.dev())
+    model.eval()
 
     tokenizer = load_tokenizer(args)
-    # model_emb, tokenizer = load_model_emb(args, tokenizer)
-    
-    model_emb = th.nn.Embedding(
-        num_embeddings=tokenizer.vocab_size, 
-        embedding_dim=args.hidden_dim, 
-        _weight=model.word_embedding.weight.clone().cpu()
-    ).eval().requires_grad_(False)
+    model_emb, tokenizer = load_model_emb(args, tokenizer)
 
     model_emb.weight = th.nn.Parameter(model.word_embedding.weight.clone().cpu())
-    model_emb_copy = get_weights(model_emb, args).eval().requires_grad_(False)
+    model_emb_copy = get_weights(model_emb, args)
 
     set_seed(args.seed2)
 
@@ -97,14 +90,16 @@ def main():
         data_args=args,
         split=args.split,
         loaded_vocab=tokenizer,
-        model_emb=model_emb.cpu(),  # using the same embedding wight with tranining data
+        model_emb=model_emb.cpu(), # using the same embedding wight with tranining data
         loop=False
     )
 
     start_t = time.time()
-
+    
     # batch, cond = next(data_valid)
     # print(batch.shape)
+
+    SOLVER_STEP = args.step
 
     model_base_name = os.path.basename(os.path.split(args.model_path)[0]) + f'.{os.path.split(args.model_path)[1]}'
     out_dir = os.path.join(args.out_dir, f"{model_base_name.split('.ema')[0]}")
@@ -114,41 +109,48 @@ def main():
     out_path = os.path.join(out_dir, f"ema{model_base_name.split('.ema')[1]}.samples")
     if not os.path.isdir(out_path):
         os.mkdir(out_path)
-    out_path = os.path.join(out_path, f"seed{args.seed2}_step{args.clamp_step}_{args.note}.json")
+    out_path = os.path.join(out_path, f"seed{args.seed2}_solverstep{SOLVER_STEP}_{args.note}.json")
     # fout = open(out_path, 'a')
 
     all_test_data = []
-
-    idx = 0
 
     try:
         while True:
             batch, cond = next(data_valid)
             # print(batch.shape)
-            if idx % world_size == rank:  # Split data per nodes
-                all_test_data.append(cond)
-            idx += 1
+            all_test_data.append(cond)
 
     except StopIteration:
         print('### End of reading iteration...')
     
-    model_emb.to(dist_util.dev())
+    from tqdm import tqdm
+    print('Start from ...', args.start_n)
+    all_test_data = all_test_data[args.start_n:]
 
-    if idx % world_size and rank >= idx % world_size:
-        all_test_data.append({})  # Dummy data for Remainder : for dist.barrier()
+    from dpm_solver_pytorch import NoiseScheduleVP, model_wrapper, DPM_Solver
 
-    if rank == 0:
-        from tqdm import tqdm
-        iterator = tqdm(all_test_data)
-    else:
-        iterator = iter(all_test_data)
+    noise_schedule = NoiseScheduleVP(schedule='discrete', betas=th.from_numpy(diffusion.betas))
 
-    for cond in iterator:
+    ## 2. Convert your discrete-time `model` to the continuous-time
+    ## noise prediction model. Here is an example for a diffusion model
+    ## `model` with the noise prediction type ("noise") 
+    model_kwargs = {}
+    model_fn = model_wrapper(
+        model,
+        noise_schedule,
+        model_type="x_start",  # or "x_start" or "v" or "score"
+        model_kwargs=model_kwargs,
+        guidance_type="uncond",
+    )
 
-        if not cond:  # Barrier for Remainder
-            for i in range(world_size):
-                dist.barrier(device_ids=[int(os.environ["LOCAL_RANK"])])
-            continue
+    ## 3. Define dpm-solver and sample by multistep DPM-Solver.
+    ## (We recommend multistep DPM-Solver for conditional sampling)
+    ## You can adjust the `steps` to balance the computation
+    ## costs and the sample quality.
+
+    dpm_solver = DPM_Solver(model_fn, noise_schedule, algorithm_type="dpmsolver++")
+
+    for cond in tqdm(all_test_data):
 
         input_ids_x = cond.pop('input_ids').to(dist_util.dev())
         x_start = model.get_embeds(input_ids_x)
@@ -157,55 +159,45 @@ def main():
 
         noise = th.randn_like(x_start)
         input_ids_mask = th.broadcast_to(input_ids_mask.unsqueeze(dim=-1), x_start.shape).to(dist_util.dev())
-        x_noised = th.where(input_ids_mask == 0, x_start, noise)
-
-        model_kwargs = {}
-
-        if args.step == args.diffusion_steps:
-            args.use_ddim = False
-            step_gap = 1
-        else:
-            args.use_ddim = True
-            step_gap = args.diffusion_steps//args.step
-
-        sample_fn = (
-            diffusion.p_sample_loop if not args.use_ddim else diffusion.ddim_sample_loop
-        )
-
-        sample_shape = (x_start.shape[0], args.seq_len, args.hidden_dim)
+        x_noised = th.where(input_ids_mask==0, x_start, noise)
+        
+        ## You can use steps = 10, 12, 15, 20, 25, 50, 100.
+        ## Empirically, we find that steps in [10, 20] can generate quite good samples.
+        ## And steps = 20 can almost converge.
         with autocast():
-            samples = sample_fn(
-                model,
-                sample_shape,
-                noise=x_noised,
-                clip_denoised=args.clip_denoised,
-                denoised_fn=partial(denoised_fn_round, args, model_emb),
-                model_kwargs=model_kwargs,
-                top_p=args.top_p,
-                clamp_step=args.clamp_step,
-                clamp_first=True,
-                mask=input_ids_mask,
+            x_sample = dpm_solver.sample(
+                x_noised,
+                steps=SOLVER_STEP,
+                order=2,
+                skip_type="time_uniform",
+                method="multistep",
+                input_ids_mask=input_ids_mask,
                 x_start=x_start,
-                gap=step_gap
             )
+        # print(x_sample[0].shape) # samples for each step [128, 128]
 
-        # model_emb_copy.cpu()
+        sample = x_sample
+        gathered_samples = [th.zeros_like(sample) for _ in range(dist.get_world_size())]
+        dist.all_gather(gathered_samples, sample)
+        all_sentence = [sample.cpu().numpy() for sample in gathered_samples]
 
-        # print(samples[0].shape) # samples for each step
-
-        sample = samples[-1]
-
-        # print('decoding for seq2seq', )
-        # print(sample.shape)
-
-        logits = model.get_logits(sample)  # bsz, seqlen, vocab
-        cands = th.topk(logits, k=1, dim=-1)
+        # print('sampling takes {:.2f}s .....'.format(time.time() - start_t))
 
         word_lst_recover = []
         word_lst_ref = []
         word_lst_source = []
 
-        # tokenizer = load_tokenizer(args)
+
+        arr = np.concatenate(all_sentence, axis=0)
+        x_t = th.tensor(arr).cuda()
+        # print('decoding for seq2seq', )
+        # print(arr.shape)
+
+        reshaped_x_t = x_t
+        logits = model.get_logits(reshaped_x_t)  # bsz, seqlen, vocab
+
+        cands = th.topk(logits, k=1, dim=-1)
+        sample = cands.indices
 
         for seq, input_mask in zip(cands.indices, input_ids_mask_ori):
             len_x = args.seq_len - sum(input_mask).tolist()
@@ -218,13 +210,10 @@ def main():
             word_lst_source.append(tokenizer.decode_token(seq[:len_x]))
             word_lst_ref.append(tokenizer.decode_token(seq[len_x:]))
 
-        for i in range(world_size):
-            if i == rank:  # Write files sequentially
-                fout = open(out_path, 'a')
-                for (recov, ref, src) in zip(word_lst_recover, word_lst_ref, word_lst_source):
-                    print(json.dumps({"recover": recov, "reference": ref, "source": src}), file=fout)
-                fout.close()
-            dist.barrier(device_ids=[int(os.environ["LOCAL_RANK"])])
+        fout = open(out_path, 'a')
+        for (recov, ref, src) in zip(word_lst_recover, word_lst_ref, word_lst_source):
+            print(json.dumps({"recover": recov, "reference": ref, "source": src}), file=fout)
+        fout.close()
 
     print('### Total takes {:.2f}s .....'.format(time.time() - start_t))
     print(f'### Written the decoded output to {out_path}')

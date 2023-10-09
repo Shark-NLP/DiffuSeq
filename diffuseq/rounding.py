@@ -99,10 +99,8 @@ def denoised_fn_round(args, model, text_emb, t):
         text_emb = text_emb.reshape(-1, text_emb.size(-1))
     else:
         text_emb = text_emb
-    # val, indices = get_knn(model_emb, text_emb.to(model_emb.device), dist=dist)
-    val, indices = get_efficient_knn(model_emb, text_emb.to(model_emb.device))
-    rounded_tokens = indices[0]
-    # print(rounded_tokens.shape)
-    new_embeds = model(rounded_tokens).view(old_shape).to(old_device)
+    _, indices = get_efficient_knn(model_emb, text_emb.to(model_emb.device))
+    rounded_tokens = indices[0].view(old_shape[:-1]).to(old_device)
+    new_embeds = model(rounded_tokens)
 
-    return new_embeds
+    return new_embeds, rounded_tokens

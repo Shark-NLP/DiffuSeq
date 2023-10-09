@@ -2,7 +2,8 @@
 import numpy as np
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.data.distributed import DistributedSampler
-
+from itertools import chain
+import glob
 import torch
 import json
 import psutil
@@ -37,7 +38,11 @@ def load_data_text(
 
     print('#'*30, '\nLoading text data...')
 
-    training_data = get_corpus(data_args, seq_len, split=split, loaded_vocab=loaded_vocab)
+    if "pretrain" in data_args.notes:
+        print("#### Load Pretrain Data, fold=", data_args.data_split_num)
+        training_data = get_corpus_pretrain(data_args, seq_len, split=split, loaded_vocab=loaded_vocab, split_num=data_args.data_split_num)
+    else:
+        training_data = get_corpus(data_args, seq_len, split=split, loaded_vocab=loaded_vocab)
 
     dataset = TextDataset(
         training_data,
@@ -155,6 +160,62 @@ def helper_tokenize(sentence_lst, vocab_dict, seq_len):
     print(f"RAM used: {psutil.Process().memory_info().rss / (1024 * 1024):.2f} MB")
     return raw_datasets
 
+def helper_tokenize_pretrain(sentence_lst, vocab_dict, seq_len, mask_ratio=0.5):
+    # Process.memory_info is expressed in bytes, so convert to megabytes
+    print(f"RAM used: {psutil.Process().memory_info().rss / (1024 * 1024):.2f} MB")
+    raw_datasets = Dataset2.from_dict(sentence_lst)
+    print(raw_datasets)
+    print(f"RAM used: {psutil.Process().memory_info().rss / (1024 * 1024):.2f} MB")
+
+    def tokenize_function(examples):
+        input_id = vocab_dict.encode_token(examples['text'])
+        result_dict = {'input_ids': input_id}
+
+        return result_dict
+
+    tokenized_datasets = raw_datasets.map(
+        tokenize_function,
+        batched=True,
+        num_proc=4,
+        remove_columns=['text'],
+        keep_in_memory = True,
+        load_from_cache_file=True,
+        desc="Running tokenizer on dataset",
+    )
+    print('### tokenized_datasets', tokenized_datasets)
+    print('### tokenized_datasets...example', tokenized_datasets['input_ids'][0])
+    print(f"RAM used: {psutil.Process().memory_info().rss / (1024 * 1024):.2f} MB")
+    
+    block_size = seq_len
+    def group_texts(examples):
+        concatenated_examples = {k: list(chain(*examples[k])) for k in examples.keys()}
+        total_length = len(concatenated_examples[list(examples.keys())[0]])
+        if total_length >= block_size:
+            total_length = (total_length // block_size) * block_size
+        result = {
+            k: [t[i: i + block_size] for i in range(0, total_length, block_size)]
+            for k, t in concatenated_examples.items()
+        }
+        random_mask_len = [np.random.randint(mask_ratio*block_size) for _ in range(len(result["input_ids"]))]
+        result["input_mask"] = [[0]*l+[1]*(block_size-l) for l in random_mask_len]
+        return result
+
+    lm_datasets = tokenized_datasets.map(
+        group_texts,
+        batched=True,
+        num_proc=4,
+        keep_in_memory = True,
+        load_from_cache_file=True,
+        desc=f"Grouping texts in chunks of {block_size}",
+    )
+
+    print(lm_datasets, 'padded dataset')
+    print(f"RAM used: {psutil.Process().memory_info().rss / (1024 * 1024):.2f} MB")
+
+    raw_datasets = datasets.DatasetDict()
+    raw_datasets['train'] = lm_datasets
+    print(f"RAM used: {psutil.Process().memory_info().rss / (1024 * 1024):.2f} MB")
+    return raw_datasets
 
 def get_corpus(data_args, seq_len, split='train', loaded_vocab=None):
 
@@ -176,9 +237,8 @@ def get_corpus(data_args, seq_len, split='train', loaded_vocab=None):
 
     with open(path, 'r') as f_reader:
         for row in f_reader:
-            content = json.loads(row)
-            sentence_lst['src'].append(content['src'].strip())
-            sentence_lst['trg'].append(content['trg'].strip())
+            sentence_lst['src'].append(json.loads(row)['src'].strip())
+            sentence_lst['trg'].append(json.loads(row)['trg'].strip())
 
     print('### Data samples...\n', sentence_lst['src'][:2], sentence_lst['trg'][:2])
         
@@ -188,6 +248,30 @@ def get_corpus(data_args, seq_len, split='train', loaded_vocab=None):
     train_dataset = helper_tokenize(sentence_lst, vocab_dict, seq_len)
     return train_dataset
 
+def get_corpus_pretrain(data_args, seq_len, split='train', loaded_vocab=None, split_num=0):
+
+    print('#'*30, '\nLoading dataset {} from {}...'.format(data_args.dataset, data_args.data_dir))
+
+    sentence_lst = {'text': []}
+    path = sorted(glob.glob(f"{data_args.data_dir}/*jsonl"))[split_num]
+    with open(path, 'r') as f_reader:
+        for row in f_reader:
+            sentence_lst['text'].append(json.loads(row)['text'].strip())
+    sentence_lst['text'] = sentence_lst['text'][len(sentence_lst['text'])//2:]
+    if split == 'train':
+        print('### Loading the TRAIN set...')
+        sentence_lst['text'] = sentence_lst['text'][:-5000]
+    elif split == 'valid':
+        print('### Loading the VALID set...')
+        sentence_lst['text'] = sentence_lst['text'][-5000:]
+
+    print('### Data samples...\n', sentence_lst['text'][:2])
+        
+    # get tokenizer.
+    vocab_dict = loaded_vocab
+
+    train_dataset = helper_tokenize_pretrain(sentence_lst, vocab_dict, seq_len)
+    return train_dataset
 
 class TextDataset(Dataset):
     def __init__(self, text_datasets, data_args, model_emb=None):

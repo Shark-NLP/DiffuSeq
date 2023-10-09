@@ -19,6 +19,7 @@
   "notes": "folder-notes",
   "data_dir": "data-dir",
   "dataset": "dataset-name",
+  "data_split_num": 0,
   "checkpoint_path": "checkpoint-path",
   "seq_len": 128,
   "hidden_t_dim": 128,
@@ -35,5 +36,11 @@
   "rescale_timesteps": true,
   "rescale_learned_sigmas": false,
   "sigma_small": false,
-  "emb_scale_factor": 1.0
+  "emb_scale_factor": 1.0,
+  "learned_mean_embed": false,
+  "denoise": false,
+  "denoise_rate": 0.2,
+  "rejection_rate": 0.0,
+  "reg_rate": 0.01,
+  "device": ""
 }

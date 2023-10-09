@@ -4,15 +4,33 @@ import argparse
 import time
 sys.path.append('.')
 
+def str2bool(v):
+    """
+    https://stackoverflow.com/questions/15008758/parsing-boolean-values-with-argparse
+    """
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ("yes", "true", "t", "y", "1"):
+        return True
+    elif v.lower() in ("no", "false", "f", "n", "0"):
+        return False
+    else:
+        raise argparse.ArgumentTypeError("boolean value expected")
+
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='training args.')
     parser.add_argument('--dataset', type=str, default='', help='name of training dataset')
     parser.add_argument('--data_dir', type=str, default='', help='path to training dataset')
+    parser.add_argument('--data_split_num', type=int, default=0, help='fold number of training dataset')
 
-    parser.add_argument('--noise_schedule', type=str, default='cosine', choices=['linear', 'cosine', 'sqrt', 'trunc_cos', 'trunc_lin', 'pw_lin'], help='the distribution of noises')
+    parser.add_argument('--noise_schedule', type=str, default='cosine', choices=['linear', 'cosine', 'sqrt', 'trunc_cos', 'trunc_lin', 'pw_lin', 'warmup-decay'], help='the distribution of noises')
     parser.add_argument('--diff_steps', type=int, default=4000, help='diffusion steps')
     parser.add_argument('--schedule_sampler', type=str, default='uniform', choices=['uniform', 'lossaware', 'fixstep'], help='schedule sampler of timesteps')
+    parser.add_argument('--learned_mean_embed', default=False, type=str2bool, help='learn mean embed for gaussian; default is zero-mean gaussian')
+    parser.add_argument('--denoise', default=False, type=str2bool, help='denoise combined with learned_mean_embed [MASK]')
+    parser.add_argument('--reg_rate', default=0.0, type=float, help='regularization rate of learned mean embed for gaussian; default is zero')
+    parser.add_argument('--denoise_rate', default=0.2, type=float, help='max denoise rate of [MASK]')
 
     parser.add_argument('--seq_len', type=int, default=128, help='max len of input sequence')
     parser.add_argument('--hidden_t_dim', type=int, default=128, help='hidden size of time embedding')
@@ -21,6 +39,7 @@ if __name__ == '__main__':
     parser.add_argument('--save_interval', type=int, default=10000, help='save step')
     parser.add_argument('--resume_checkpoint', type=str, default='none', help='path to resume checkpoint, like xxx/xxx.pt')
     parser.add_argument('--lr', type=float, default=1e-04, help='learning rate')
+    parser.add_argument('--use_fp16', action='store_true', help='use fp16 or not')
     parser.add_argument('--bsz', type=int, default=64, help='batch size')
     parser.add_argument('--microbatch', type=int, default=64, help='microbatch size')
     parser.add_argument('--seed', type=int, default=101, help='random seed')
@@ -62,8 +81,8 @@ if __name__ == '__main__':
                   f"TOKENIZERS_PARALLELISM=false " \
                   f"python train.py   " \
                   f"--checkpoint_path {Model_FILE} " \
-                  f"--dataset {args.dataset} --data_dir {args.data_dir} --vocab {args.vocab} --use_plm_init {args.use_plm_init} " \
-                  f"--lr {args.lr} " \
+                  f"--dataset {args.dataset} --data_dir {args.data_dir} --data_split_num {args.data_split_num} --vocab {args.vocab} --use_plm_init {args.use_plm_init} " \
+                  f"--lr {args.lr} --use_fp16 {args.use_fp16} " \
                   f"--batch_size {args.bsz} --microbatch {args.microbatch} " \
                   f"--diffusion_steps {args.diff_steps} " \
                   f"--noise_schedule {args.noise_schedule} " \
@@ -71,7 +90,10 @@ if __name__ == '__main__':
                   f"--seq_len {args.seq_len} --hidden_t_dim {args.hidden_t_dim} --seed {args.seed} " \
                   f"--hidden_dim {args.hidden_dim} " \
                   f"--learning_steps {args.learning_steps} --save_interval {args.save_interval} " \
-                  f"--config_name {args.config_name} --notes {args.notes}"
+                  f"--config_name {args.config_name} --notes {args.notes} " \
+                  f"--learned_mean_embed {args.learned_mean_embed} " \
+                  f"--denoise {args.denoise} --denoise_rate {args.denoise_rate} " \
+                  f"--reg_rate {args.reg_rate} "
 
     COMMANDLINE += " " + args.app
 

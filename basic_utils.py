@@ -122,6 +122,11 @@ def create_model_and_diffusion(
     rescale_learned_sigmas,
     use_kl,
     notes,
+    learned_mean_embed=False,
+    rejection_rate=0.0,
+    denoise=False,
+    denoise_rate=0.2,
+    device="",
     **kwargs,
 ):
     model = TransformerNetModel(
@@ -131,7 +136,8 @@ def create_model_and_diffusion(
         dropout=dropout,
         config_name=config_name,
         vocab_size=vocab_size,
-        init_pretrained=use_plm_init
+        init_pretrained=use_plm_init,
+        learned_mean_embed=learned_mean_embed,
     )
 
     betas = gd.get_named_beta_schedule(noise_schedule, diffusion_steps)
@@ -147,7 +153,12 @@ def create_model_and_diffusion(
         learn_sigmas = learn_sigma,
         sigma_small = sigma_small,
         use_kl = use_kl,
-        rescale_learned_sigmas=rescale_learned_sigmas
+        rescale_learned_sigmas=rescale_learned_sigmas,
+        rejection_rate=rejection_rate,
+        denoise=denoise,
+        denoise_rate=denoise_rate,
+        device=device,
+        max_T = diffusion_steps,
     )
 
     return model, diffusion

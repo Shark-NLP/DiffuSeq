@@ -9,6 +9,7 @@ import torch.distributed as dist
 from torch.nn.parallel.distributed import DistributedDataParallel as DDP
 from torch.optim import AdamW
 import io
+import time
 
 from diffuseq.utils import dist_util, logger
 from diffuseq.utils.fp16_util import (
@@ -20,6 +21,9 @@ from diffuseq.utils.fp16_util import (
 )
 from diffuseq.utils.nn import update_ema
 from diffuseq.step_sample import LossAwareSampler, UniformSampler
+
+from torch.cuda.amp import GradScaler
+from torch.cuda.amp import autocast
 
 # For ImageNet experiments, this was a good default value.
 # We found that the lg_loss_scale quickly climbed to
@@ -86,8 +90,8 @@ class TrainLoop:
         self.checkpoint_path = checkpoint_path # DEBUG **
 
         self._load_and_sync_parameters()
-        if self.use_fp16:
-            self._setup_fp16()
+        # if self.use_fp16:
+        #     self._setup_fp16()
 
         self.opt = AdamW(self.master_params, lr=self.lr, weight_decay=self.weight_decay)
         if self.resume_step:
@@ -125,11 +129,14 @@ class TrainLoop:
             self.use_ddp = False
             self.ddp_model = self.model
 
+        self.scaler = GradScaler()
+
     def _load_and_sync_parameters(self):
         resume_checkpoint = find_resume_checkpoint() or self.resume_checkpoint
 
         if resume_checkpoint[-3:] == '.pt':
             self.resume_step = parse_resume_step_from_filename(resume_checkpoint)
+            self.resume_step = 0
             if dist.get_rank() == 0:
                 logger.log(f"loading model from checkpoint: {resume_checkpoint}...")
                 self.model.load_state_dict(
@@ -170,14 +177,23 @@ class TrainLoop:
         self.model.convert_to_fp16()
 
     def run_loop(self):
+        start = 0
         while (
             not self.learning_steps
             or self.step + self.resume_step < self.learning_steps
         ):
             batch, cond = next(self.data)
+            # if self.step>1900:
+            #     import pdb; pdb.set_trace()
             self.run_step(batch, cond)
             if self.step % self.log_interval == 0:
                 logger.dumpkvs()
+                ## computing time
+                # end = time.time()
+                # if start !=0:
+                #     if int(os.environ['LOCAL_RANK']) == 0:
+                #         print('time...', end-start)
+                # start = end
             if self.eval_data is not None and self.step % self.eval_interval == 0:
                 batch_eval, cond_eval = next(self.eval_data)
                 self.forward_only(batch_eval, cond_eval)
@@ -240,53 +256,89 @@ class TrainLoop:
                 k: v[i : i + self.microbatch].to(dist_util.dev())
                 for k, v in cond.items()
             }
+            # print('*'*30)
+            # print(int(os.environ['LOCAL_RANK']))
+            # print(micro_cond)
+            # print('*'*30)
             last_batch = (i + self.microbatch) >= batch.shape[0]
             t, weights = self.schedule_sampler.sample(micro.shape[0], dist_util.dev())
             # print(micro_cond.keys())
-            compute_losses = functools.partial(
-                self.diffusion.training_losses,
-                self.ddp_model,
-                micro,
-                t,
-                model_kwargs=micro_cond,
-            )
+            if self.use_fp16:
+                with autocast():
+                    compute_losses = functools.partial(
+                        self.diffusion.training_losses,
+                        self.ddp_model,
+                        micro,
+                        t,
+                        model_kwargs=micro_cond,
+                    )
 
-            if last_batch or not self.use_ddp:
-                losses = compute_losses()
+                    if last_batch or not self.use_ddp:
+                        losses = compute_losses()
+                    else:
+                        with self.ddp_model.no_sync():
+                            losses = compute_losses()
+
+                    if isinstance(self.schedule_sampler, LossAwareSampler):
+                        self.schedule_sampler.update_with_local_losses(
+                            t, losses["loss"].detach()
+                        )
+
+                    loss = (losses["loss"] * weights).mean()
+                    log_loss_dict(
+                        self.diffusion, t, {k: v * weights for k, v in losses.items()}
+                    )
+
+                self.scaler.scale(loss).backward()
+            
             else:
-                with self.ddp_model.no_sync():
-                    losses = compute_losses()
-
-            if isinstance(self.schedule_sampler, LossAwareSampler):
-                self.schedule_sampler.update_with_local_losses(
-                    t, losses["loss"].detach()
+                compute_losses = functools.partial(
+                    self.diffusion.training_losses,
+                    self.ddp_model,
+                    micro,
+                    t,
+                    model_kwargs=micro_cond,
                 )
 
-            loss = (losses["loss"] * weights).mean()
-            log_loss_dict(
-                self.diffusion, t, {k: v * weights for k, v in losses.items()}
-            )
-            if self.use_fp16:
-                loss_scale = 2 ** self.lg_loss_scale
-                (loss * loss_scale).backward()
-            else:
+                if last_batch or not self.use_ddp:
+                    losses = compute_losses()
+                else:
+                    with self.ddp_model.no_sync():
+                        losses = compute_losses()
+
+                if isinstance(self.schedule_sampler, LossAwareSampler):
+                    self.schedule_sampler.update_with_local_losses(
+                        t, losses["loss"].detach()
+                    )
+
+                loss = (losses["loss"] * weights).mean()
+                log_loss_dict(
+                    self.diffusion, t, {k: v * weights for k, v in losses.items()}
+                )
                 loss.backward()
 
     def optimize_fp16(self):
-        if any(not th.isfinite(p.grad).all() for p in self.model_params):
-            self.lg_loss_scale -= 1
-            logger.log(f"Found NaN, decreased lg_loss_scale to {self.lg_loss_scale}")
-            return
+        # if any(not th.isfinite(p.grad).all() for p in self.model_params):
+        #     self.lg_loss_scale -= 1
+        #     logger.log(f"Found NaN, decreased lg_loss_scale to {self.lg_loss_scale}")
+        #     return
 
-        model_grads_to_master_grads(self.model_params, self.master_params)
-        self.master_params[0].grad.mul_(1.0 / (2 ** self.lg_loss_scale))
-        self._log_grad_norm()
+        # model_grads_to_master_grads(self.model_params, self.master_params)
+        # self.master_params[0].grad.mul_(1.0 / (2 ** self.lg_loss_scale))
+        if self.gradient_clipping > 0:
+            self.grad_clip()
+        # self._log_grad_norm()
         self._anneal_lr()
-        self.opt.step()
+        # self.opt.step() # do no call it if call scalar step
+        # self.scaler.unscale_(self.opt)
+        # th.nn.utils.clip_grad_norm_(self.model.parameters(), self.gradient_clipping)
+        self.scaler.step(self.opt)
+        self.scaler.update()
+        self._log_grad_norm()
         for rate, params in zip(self.ema_rate, self.ema_params):
             update_ema(params, self.master_params, rate=rate)
-        master_params_to_model_params(self.model_params, self.master_params)
-        self.lg_loss_scale += self.fp16_scale_growth
+        # master_params_to_model_params(self.model_params, self.master_params)
+        # self.lg_loss_scale += self.fp16_scale_growth
 
     def grad_clip(self):
         # print('doing gradient clipping')
@@ -337,8 +389,8 @@ class TrainLoop:
     def log_step(self):
         logger.logkv("step", self.step + self.resume_step)
         logger.logkv("samples", (self.step + self.resume_step + 1) * self.global_batch)
-        if self.use_fp16:
-            logger.logkv("lg_loss_scale", self.lg_loss_scale)
+        # if self.use_fp16:
+        #     logger.logkv("lg_loss_scale", self.lg_loss_scale)
 
     def save(self):
         def save_checkpoint(rate, params):
@@ -364,10 +416,10 @@ class TrainLoop:
         dist.barrier()
 
     def _master_params_to_state_dict(self, master_params):
-        if self.use_fp16:
-            master_params = unflatten_master_params(
-                list(self.model.parameters()), master_params # DEBUG **
-            )
+        # if self.use_fp16:
+        #     master_params = unflatten_master_params(
+        #         list(self.model.parameters()), master_params # DEBUG **
+        #     )
         state_dict = self.model.state_dict()
         for i, (name, _value) in enumerate(self.model.named_parameters()):
             assert name in state_dict
@@ -376,10 +428,10 @@ class TrainLoop:
 
     def _state_dict_to_master_params(self, state_dict):
         params = [state_dict[name] for name, _ in self.model.named_parameters()]
-        if self.use_fp16:
-            return make_master_params(params)
-        else:
-            return params
+        # if self.use_fp16:
+        #     return make_master_params(params)
+        # else:
+        return params
 
 
 def parse_resume_step_from_filename(filename):

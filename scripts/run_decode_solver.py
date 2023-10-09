@@ -32,14 +32,14 @@ if __name__ == '__main__':
     output_lst = []
     for lst in glob.glob(args.model_dir):
         print(lst)
-        checkpoints = sorted(glob.glob(f"{lst}/{args.pattern}*pt"))[::-1]
+        checkpoints = sorted(glob.glob(f"{lst}/{args.pattern}*pt"))[::-1][:1]
 
         out_dir = 'generation_outputs'
         if not os.path.isdir(out_dir):
             os.mkdir(out_dir)
 
         for checkpoint_one in checkpoints:
-            COMMAND = f'python -m torch.distributed.launch --nproc_per_node=1 --master_port=12{random.randint(0,9)}{random.randint(0,9)}{random.randint(0,9)} --use_env sample_seq2seq.py ' \
+            COMMAND = f'python -m torch.distributed.launch --nproc_per_node=1 --master_port=12{random.randint(0,9)}{random.randint(0,9)}{random.randint(0,9)} --use_env sample_seq2seq_dpmSolver.py ' \
             f'--model_path {checkpoint_one} --step {args.step} ' \
             f'--batch_size {args.bsz} --start_n {args.start_n} --seed2 {args.seed} --split {args.split} ' \
             f'--out_dir {out_dir} --top_p {args.top_p} ' \

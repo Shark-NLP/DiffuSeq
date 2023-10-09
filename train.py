@@ -63,6 +63,7 @@ def main():
     print('#'*30, 'size of vocab', args.vocab_size)
 
     logger.log("### Creating model and diffusion...")
+    args.device = dist_util.dev()
     # print('#'*30, 'CUDA_VISIBLE_DEVICES', os.environ['CUDA_VISIBLE_DEVICES'])
     model, diffusion = create_model_and_diffusion(
         **args_to_dict(args, load_defaults_config().keys())
@@ -77,6 +78,7 @@ def main():
     schedule_sampler = create_named_schedule_sampler(args.schedule_sampler, diffusion)
 
     logger.log(f'### Saving the hyperparameters to {args.checkpoint_path}/training_args.json')
+    args.device = ""
     with open(f'{args.checkpoint_path}/training_args.json', 'w') as f:
         json.dump(args.__dict__, f, indent=2)
 
