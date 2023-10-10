@@ -1,7 +1,7 @@
 # <img src="img/logo.jpg" width="8%" alt="" align=center /> DiffuSeq
 
 Official Codebase for [*__*DiffuSeq*__: Sequence to Sequence Text Generation With Diffusion Models*](https://arxiv.org/abs/2210.08933) and 
-[*__*DiffuSeq-v2*__: Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models*](https://arxiv.org/abs/).
+[*__*DiffuSeq-v2*__: Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models*](https://arxiv.org/abs/2310.05793).
 
 <p align = "center">
 <img src="img/diffuseq-process.png" width="95%" alt="" align=center />
@@ -132,6 +132,14 @@ Please add the citation if our paper or code helps you.
   title = {{DiffuSeq}: Sequence to Sequence Text Generation with Diffusion Models},
   year = 2023
 }
+
+@article{gong2023diffuseqv2,
+  title={DiffuSeq-v2: Bridging Discrete and Continuous Text Spaces for Accelerated Seq2Seq Diffusion Models},
+  author={Gong, Shansan and Li, Mukai and Feng, Jiangtao and Wu, Zhiyong and Kong, Lingpeng},
+  journal={arXiv preprint arXiv:2310.05793},
+  year={2023}
+}
+
 ```
 <p align = "center">
 <img src="img/DiffuSeq_poster.png" width="100%" alt="" align=center />
