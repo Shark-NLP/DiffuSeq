@@ -22,7 +22,7 @@ import wandb
 
 ### custom your wandb setting here ###
 # os.environ["WANDB_API_KEY"] = ""
-os.environ["WANDB_MODE"] = "offline"
+os.environ["WANDB_API_KEY"] = os.environ.get("WANDB_API_KEY")
 
 def create_argparser():
     defaults = dict()
@@ -82,7 +82,7 @@ def main():
 
     if ('LOCAL_RANK' not in os.environ) or (int(os.environ['LOCAL_RANK']) == 0):
         wandb.init(
-            project=os.getenv("WANDB_PROJECT", "DiffuSeq"),
+            project=os.getenv("WANDB_PROJECT", "diffuseq"),
             name=args.checkpoint_path,
         )
         wandb.config.update(args.__dict__, allow_val_change=True)
