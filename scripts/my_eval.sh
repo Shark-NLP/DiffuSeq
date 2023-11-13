@@ -7,9 +7,9 @@
 #SBATCH --requeue
 #SBATCH --time=5:00:00
 #SBATCH --mem=200GB
-#SBATCH --output=logs/res_%j.out
-#SBATCH --error=logs/err_%j.err
-#SBATCH --job-name='diffuseq-replica-decode'
+#SBATCH --output=logs/eval_%j.out
+#SBATCH --error=logs/eval_%j.err
+#SBATCH --job-name='diffuseq-replica-eval'
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=ad6489@nyu.edu
 
@@ -21,4 +21,4 @@ singularity exec --nv \
 	--overlay $overlay:ro \
 	$img \
        	/bin/bash -c \
-	"source /ext3/env.sh; python scripts/eval_seq2seq.py --folder generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231015-19\:22\:30/ema_0.9999_010000.pt.samples/ --mbr"
+	"source /ext3/env.sh; python scripts/eval_seq2seq.py --folder generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231109-01:58:16/ema_0.9999_020000.pt.samples/ --mbr"

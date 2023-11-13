@@ -40,6 +40,7 @@ def create_argparser():
 @th.no_grad()
 def main():
     args = create_argparser().parse_args()
+    print(args)
 
     dist_util.setup_dist()
     logger.configure()

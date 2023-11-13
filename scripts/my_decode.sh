@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --gres=gpu:rtx8000:1
 #SBATCH --requeue
-#SBATCH --time=5:00:00
+#SBATCH --time=23:00:00
 #SBATCH --mem=200GB
 #SBATCH --output=logs/res_%j.out
 #SBATCH --error=logs/err_%j.err
@@ -22,8 +22,6 @@ singularity exec --nv \
 	$img \
        	/bin/bash -c \
 	"source /ext3/env.sh; python -u /scratch/ad6489/thesis/DiffuSeq/scripts/run_decode.py \
-	--model_dir diffusion_models/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231015-19:22:30 \
-	--seed 123 \
-	--split test \
-	--bsz 128"
-	> log_dec.out 2> log_dec.err
+	--model_dir diffusion_models/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231109-01\:58\:16 \
+	--seed 110 \
+	--split test"
