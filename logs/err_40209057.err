@@ -1,0 +1,4 @@
+Running tokenizer on dataset (num_proc=4):   0%|          | 0/2500 [00:00<?, ? examples/s]Running tokenizer on dataset (num_proc=4):  25%|██▌       | 625/2500 [00:00<00:00, 2251.77 examples/s]Running tokenizer on dataset (num_proc=4): 100%|██████████| 2500/2500 [00:00<00:00, 6774.11 examples/s]
+merge and mask:   0%|          | 0/2500 [00:00<?, ? examples/s]merge and mask:  80%|████████  | 2000/2500 [00:00<00:00, 12944.50 examples/s]merge and mask: 100%|██████████| 2500/2500 [00:00<00:00, 14961.38 examples/s]
+padding:   0%|          | 0/2500 [00:00<?, ? examples/s]padding:  80%|████████  | 2000/2500 [00:00<00:00, 18767.01 examples/s]padding: 100%|██████████| 2500/2500 [00:00<00:00, 18346.79 examples/s]
+  0%|          | 0/50 [00:00<?, ?it/s]slurmstepd: error: *** JOB 40209057 ON gr060 CANCELLED AT 2023-11-17T02:32:16 ***

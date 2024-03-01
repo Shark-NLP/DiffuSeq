@@ -1,0 +1,35 @@
+diffusion_models/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231109-01:58:16
+torchrun --nproc_per_node=1 --master_port=12334 /scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py --model_path diffusion_models/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231109-01:58:16/ema_0.9999_020000.pt --step 2000 --batch_size 50 --seed2 101 --split test --out_dir generation_outputs --top_p -1 
+Namespace(model_path='diffusion_models/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231109-01:58:16/ema_0.9999_020000.pt', step=2000, out_dir='generation_outputs', top_p=-1, lr=0.0001, batch_size=50, microbatch=64, learning_steps=320000, log_interval=20, save_interval=40000, eval_interval=1000, ema_rate='0.9999', resume_checkpoint='none', schedule_sampler='lossaware', diffusion_steps=2000, noise_schedule='sqrt', timestep_respacing='', vocab='bert', use_plm_init='no', vocab_size=0, config_name='huggingface-config', notes='folder-notes', data_dir='data-dir', dataset='dataset-name', checkpoint_path='checkpoint-path', seq_len=128, hidden_t_dim=128, hidden_dim=128, dropout=0.1, use_fp16=False, fp16_scale_growth=0.001, seed=102, gradient_clipping=-1.0, weight_decay=0.0, learn_sigma=False, use_kl=False, predict_xstart=True, rescale_timesteps=True, rescale_learned_sigmas=False, sigma_small=False, emb_scale_factor=1.0, split='test', clamp_step=0, seed2=101, clip_denoised=False)
+Logging to /state/partition1/job-40209057/openai-2023-11-17-02-32-09-199127
+diffusion_models/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231109-01:58:16/training_args.json
+### Creating model and diffusion...
+### The parameter count is 91225274
+### Sampling...on test
+############################## 
+Loading text data...
+############################## 
+Loading dataset qqp from /scratch/ad6489/thesis/DiffuSeq/datasets/QQP...
+### Loading form the TEST set...
+### Data samples...
+ ['Astrology: I am a Capricorn Sun Cap moon and cap rising...what does that say about me?', 'How can I be a good geologist?'] ["I'm a triple Capricorn (Sun, Moon and ascendant in Capricorn) What does this say about me?", 'What should I do to be a great geologist?']
+RAM used: 1358.22 MB
+Dataset({
+    features: ['src', 'trg'],
+    num_rows: 2500
+})
+RAM used: 1359.87 MB
+### tokenized_datasets Dataset({
+    features: ['input_id_x', 'input_id_y'],
+    num_rows: 2500
+})
+### tokenized_datasets...example [101, 28625, 6483, 1024, 1045, 2572, 1037, 6178, 7277, 9691, 3103, 6178, 4231, 1998, 6178, 4803, 1012, 1012, 1012, 2054, 2515, 2008, 2360, 2055, 2033, 1029, 102]
+RAM used: 1365.69 MB
+RAM used: 1369.20 MB
+Dataset({
+    features: ['input_id_x', 'input_id_y', 'input_ids', 'input_mask'],
+    num_rows: 2500
+}) padded dataset
+RAM used: 1382.49 MB
+RAM used: 1382.49 MB
+### End of reading iteration...

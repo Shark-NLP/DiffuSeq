@@ -1,0 +1,609 @@
+ OPENAI_LOGDIR=diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51  TOKENIZERS_PARALLELISM=false python train.py   --checkpoint_path diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51 --dataset iwslt14 --data_dir /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14 --vocab bert --use_plm_init no --lr 0.0001 --batch_size 2048 --microbatch 64 --diffusion_steps 2000 --noise_schedule sqrt --schedule_sampler lossaware --resume_checkpoint none --seq_len 200 --hidden_t_dim 128 --seed 102 --hidden_dim 256 --learning_steps 50000 --save_interval 10000 --config_name bert-base-uncased --notes test-iwslt1420240225-04:33:51 
+ OPENAI_LOGDIR=diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51  TOKENIZERS_PARALLELISM=false python train.py   --checkpoint_path diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51 --dataset iwslt14 --data_dir /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14 --vocab bert --use_plm_init no --lr 0.0001 --batch_size 2048 --microbatch 64 --diffusion_steps 2000 --noise_schedule sqrt --schedule_sampler lossaware --resume_checkpoint none --seq_len 200 --hidden_t_dim 128 --seed 102 --hidden_dim 256 --learning_steps 50000 --save_interval 10000 --config_name bert-base-uncased --notes test-iwslt1420240225-04:33:51  OPENAI_LOGDIR=diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51  TOKENIZERS_PARALLELISM=false python train.py   --checkpoint_path diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51 --dataset iwslt14 --data_dir /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14 --vocab bert --use_plm_init no --lr 0.0001 --batch_size 2048 --microbatch 64 --diffusion_steps 2000 --noise_schedule sqrt --schedule_sampler lossaware --resume_checkpoint none --seq_len 200 --hidden_t_dim 128 --seed 102 --hidden_dim 256 --learning_steps 50000 --save_interval 10000 --config_name bert-base-uncased --notes test-iwslt1420240225-04:33:51 
+
+ OPENAI_LOGDIR=diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51  TOKENIZERS_PARALLELISM=false python train.py   --checkpoint_path diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51 --dataset iwslt14 --data_dir /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14 --vocab bert --use_plm_init no --lr 0.0001 --batch_size 2048 --microbatch 64 --diffusion_steps 2000 --noise_schedule sqrt --schedule_sampler lossaware --resume_checkpoint none --seq_len 200 --hidden_t_dim 128 --seed 102 --hidden_dim 256 --learning_steps 50000 --save_interval 10000 --config_name bert-base-uncased --notes test-iwslt1420240225-04:33:51 
+Logging to diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51
+### Creating data loader...
+Logging to diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51
+Logging to diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51
+Logging to diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51
+### Creating data loader...
+### Creating data loader...
+### Creating data loader...
+initializing the random embeddings Embedding(30522, 256)
+############################## 
+Loading text data...
+############################## 
+Loading dataset iwslt14 from /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14...
+### Loading form the TRAIN set...
+### Data samples...
+ ['und was menschliche gesundheit ist , kann auch ziemlich kompliziert sein .', 'und diese zwei zusammen zu bringen , erscheint vielleicht wie eine gewaltige aufgabe . aber was ich ihnen zu sagen versuche ist , dass es trotz dieser komplexität einige einfache themen gibt , von denen ich denke , wenn wir diese verstehen , können wir uns wirklich weiter entwickeln .'] ['and it can be a very complicated thing , what human health is .', 'and bringing those two together might seem a very daunting task , but what i &apos;m going to try to say is that even in that complexity , there &apos;s some simple themes that i think , if we understand , we can really move forward .']
+RAM used: 596.62 MB
+Dataset({
+    features: ['src', 'trg'],
+    num_rows: 160239
+})
+RAM used: 656.13 MB
+reload the random embeddings Embedding(30522, 256)
+############################## 
+Loading text data...
+############################## 
+Loading dataset iwslt14 from /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14...
+### Loading form the TRAIN set...
+### Data samples...
+ ['und was menschliche gesundheit ist , kann auch ziemlich kompliziert sein .', 'und diese zwei zusammen zu bringen , erscheint vielleicht wie eine gewaltige aufgabe . aber was ich ihnen zu sagen versuche ist , dass es trotz dieser komplexität einige einfache themen gibt , von denen ich denke , wenn wir diese verstehen , können wir uns wirklich weiter entwickeln .'] ['and it can be a very complicated thing , what human health is .', 'and bringing those two together might seem a very daunting task , but what i &apos;m going to try to say is that even in that complexity , there &apos;s some simple themes that i think , if we understand , we can really move forward .']
+RAM used: 614.34 MB
+Dataset({
+    features: ['src', 'trg'],
+    num_rows: 160239
+})
+RAM used: 674.10 MB
+reload the random embeddings Embedding(30522, 256)
+############################## 
+Loading text data...
+############################## 
+Loading dataset iwslt14 from /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14...
+### Loading form the TRAIN set...
+### Data samples...
+ ['und was menschliche gesundheit ist , kann auch ziemlich kompliziert sein .', 'und diese zwei zusammen zu bringen , erscheint vielleicht wie eine gewaltige aufgabe . aber was ich ihnen zu sagen versuche ist , dass es trotz dieser komplexität einige einfache themen gibt , von denen ich denke , wenn wir diese verstehen , können wir uns wirklich weiter entwickeln .'] ['and it can be a very complicated thing , what human health is .', 'and bringing those two together might seem a very daunting task , but what i &apos;m going to try to say is that even in that complexity , there &apos;s some simple themes that i think , if we understand , we can really move forward .']
+RAM used: 615.70 MB
+Dataset({
+    features: ['src', 'trg'],
+    num_rows: 160239
+})
+RAM used: 675.43 MB
+reload the random embeddings Embedding(30522, 256)
+############################## 
+Loading text data...
+############################## 
+Loading dataset iwslt14 from /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14...
+### Loading form the TRAIN set...
+### Data samples...
+ ['und was menschliche gesundheit ist , kann auch ziemlich kompliziert sein .', 'und diese zwei zusammen zu bringen , erscheint vielleicht wie eine gewaltige aufgabe . aber was ich ihnen zu sagen versuche ist , dass es trotz dieser komplexität einige einfache themen gibt , von denen ich denke , wenn wir diese verstehen , können wir uns wirklich weiter entwickeln .'] ['and it can be a very complicated thing , what human health is .', 'and bringing those two together might seem a very daunting task , but what i &apos;m going to try to say is that even in that complexity , there &apos;s some simple themes that i think , if we understand , we can really move forward .']
+RAM used: 617.05 MB
+Dataset({
+    features: ['src', 'trg'],
+    num_rows: 160239
+})
+RAM used: 676.89 MB
+### tokenized_datasets Dataset({
+    features: ['input_id_x', 'input_id_y'],
+    num_rows: 160239
+})
+### tokenized_datasets...example [101, 6151, 2001, 2273, 11624, 27412, 16216, 25168, 26036, 2102, 21541, 1010, 22827, 2078, 8740, 2818, 1062, 2666, 19968, 7033, 12849, 8737, 3669, 21548, 2102, 7367, 2378, 1012, 102]
+RAM used: 750.50 MB
+### tokenized_datasets Dataset({
+    features: ['input_id_x', 'input_id_y'],
+    num_rows: 160239
+})
+### tokenized_datasets...example [101, 6151, 2001, 2273, 11624, 27412, 16216, 25168, 26036, 2102, 21541, 1010, 22827, 2078, 8740, 2818, 1062, 2666, 19968, 7033, 12849, 8737, 3669, 21548, 2102, 7367, 2378, 1012, 102]
+RAM used: 826.55 MB
+### tokenized_datasets Dataset({
+    features: ['input_id_x', 'input_id_y'],
+    num_rows: 160239
+})
+### tokenized_datasets...example [101, 6151, 2001, 2273, 11624, 27412, 16216, 25168, 26036, 2102, 21541, 1010, 22827, 2078, 8740, 2818, 1062, 2666, 19968, 7033, 12849, 8737, 3669, 21548, 2102, 7367, 2378, 1012, 102]
+RAM used: 828.59 MB
+### tokenized_datasets Dataset({
+    features: ['input_id_x', 'input_id_y'],
+    num_rows: 160239
+})
+### tokenized_datasets...example [101, 6151, 2001, 2273, 11624, 27412, 16216, 25168, 26036, 2102, 21541, 1010, 22827, 2078, 8740, 2818, 1062, 2666, 19968, 7033, 12849, 8737, 3669, 21548, 2102, 7367, 2378, 1012, 102]
+RAM used: 829.71 MB
+RAM used: 927.79 MB
+RAM used: 1004.86 MB
+RAM used: 1008.16 MB
+RAM used: 1007.06 MB
+Dataset({
+    features: ['input_id_x', 'input_id_y', 'input_ids', 'input_mask'],
+    num_rows: 160239
+}) padded dataset
+RAM used: 1380.64 MB
+RAM used: 1348.24 MB
+Dataset({
+    features: ['input_id_x', 'input_id_y', 'input_ids', 'input_mask'],
+    num_rows: 160239
+}) padded dataset
+RAM used: 1459.43 MB
+RAM used: 1427.03 MB
+Dataset({
+    features: ['input_id_x', 'input_id_y', 'input_ids', 'input_mask'],
+    num_rows: 160239
+}) padded dataset
+RAM used: 1457.56 MB
+RAM used: 1425.16 MB
+Dataset({
+    features: ['input_id_x', 'input_id_y', 'input_ids', 'input_mask'],
+    num_rows: 160239
+}) padded dataset
+RAM used: 1459.73 MB
+RAM used: 1427.33 MB
+############################## 
+Loading text data...
+############################## 
+Loading dataset iwslt14 from /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14...
+### Loading form the VALID set...
+### Data samples...
+ ['es ist diese pyramide .', 'durch die muttermilch .'] ['it &apos;s that pyramid .', 'in mother &apos;s milk .']
+RAM used: 1114.19 MB
+Dataset({
+    features: ['src', 'trg'],
+    num_rows: 7283
+})
+RAM used: 1118.25 MB
+### tokenized_datasets Dataset({
+    features: ['input_id_x', 'input_id_y'],
+    num_rows: 7283
+})
+### tokenized_datasets...example [101, 9686, 21541, 8289, 2063, 11918, 2063, 1012, 102]
+RAM used: 1126.80 MB
+RAM used: 1139.32 MB
+############################## 
+Loading text data...
+############################## 
+Loading dataset iwslt14 from /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14...
+### Loading form the VALID set...
+### Data samples...
+ ['es ist diese pyramide .', 'durch die muttermilch .'] ['it &apos;s that pyramid .', 'in mother &apos;s milk .']
+RAM used: 1192.16 MB
+Dataset({
+    features: ['src', 'trg'],
+    num_rows: 7283
+})
+RAM used: 1196.22 MB
+############################## 
+Loading text data...
+############################## 
+Loading dataset iwslt14 from /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14...
+### Loading form the VALID set...
+### Data samples...
+ ['es ist diese pyramide .', 'durch die muttermilch .'] ['it &apos;s that pyramid .', 'in mother &apos;s milk .']
+RAM used: 1193.73 MB
+Dataset({
+    features: ['src', 'trg'],
+    num_rows: 7283
+})
+RAM used: 1197.79 MB
+############################## 
+Loading text data...
+############################## 
+Loading dataset iwslt14 from /scratch/ad6489/thesis/DiffuSeq/datasets/iwslt14...
+### Loading form the VALID set...
+### Data samples...
+ ['es ist diese pyramide .', 'durch die muttermilch .'] ['it &apos;s that pyramid .', 'in mother &apos;s milk .']
+RAM used: 1190.16 MB
+Dataset({
+    features: ['src', 'trg'],
+    num_rows: 7283
+})
+RAM used: 1194.22 MB
+Dataset({
+    features: ['input_id_x', 'input_id_y', 'input_ids', 'input_mask'],
+    num_rows: 7283
+}) padded dataset
+RAM used: 1160.06 MB
+RAM used: 1160.06 MB
+############################## size of vocab 30522
+### Creating model and diffusion...
+### tokenized_datasets Dataset({
+    features: ['input_id_x', 'input_id_y'],
+    num_rows: 7283
+})
+### tokenized_datasets...example [101, 9686, 21541, 8289, 2063, 11918, 2063, 1012, 102]
+RAM used: 1205.28 MB
+### tokenized_datasets Dataset({
+    features: ['input_id_x', 'input_id_y'],
+    num_rows: 7283
+})
+### tokenized_datasets...example [101, 9686, 21541, 8289, 2063, 11918, 2063, 1012, 102]
+RAM used: 1206.41 MB
+### tokenized_datasets Dataset({
+    features: ['input_id_x', 'input_id_y'],
+    num_rows: 7283
+})
+### tokenized_datasets...example [101, 9686, 21541, 8289, 2063, 11918, 2063, 1012, 102]
+RAM used: 1202.86 MB
+RAM used: 1217.62 MB
+RAM used: 1218.71 MB
+RAM used: 1215.18 MB
+### The parameter count is 95328826
+### Saving the hyperparameters to diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51/training_args.json
+Dataset({
+    features: ['input_id_x', 'input_id_y', 'input_ids', 'input_mask'],
+    num_rows: 7283
+}) padded dataset
+RAM used: 1240.80 MB
+RAM used: 1240.80 MB
+############################## size of vocab 30522
+### Creating model and diffusion...
+Dataset({
+    features: ['input_id_x', 'input_id_y', 'input_ids', 'input_mask'],
+    num_rows: 7283
+}) padded dataset
+RAM used: 1242.34 MB
+RAM used: 1242.34 MB
+############################## size of vocab 30522
+### Creating model and diffusion...
+Dataset({
+    features: ['input_id_x', 'input_id_y', 'input_ids', 'input_mask'],
+    num_rows: 7283
+}) padded dataset
+RAM used: 1238.74 MB
+RAM used: 1238.74 MB
+############################## size of vocab 30522
+### Creating model and diffusion...
+### The parameter count is 95328826
+### Saving the hyperparameters to diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51/training_args.json
+### The parameter count is 95328826
+### Saving the hyperparameters to diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51/training_args.json
+### Training...
+### Training...
+### The parameter count is 95328826
+### Saving the hyperparameters to diffusion_models/diffuseq_iwslt14_h256_lr0.0001_t2000_sqrt_lossaware_seed102_test-iwslt1420240225-04:33:51/training_args.json
+### Training...
+### Training...
+cuda:0
+------------------------
+| grad_norm | 36.1     |
+| loss      | 1.08     |
+| loss_q0   | 1.09     |
+| loss_q1   | 1.08     |
+| loss_q2   | 1.09     |
+| loss_q3   | 1.08     |
+| mse       | 1.08     |
+| mse_q0    | 1.09     |
+| mse_q1    | 1.08     |
+| mse_q2    | 1.09     |
+| mse_q3    | 1.08     |
+| nll       | 19       |
+| nll_q0    | 19.3     |
+| nll_q1    | 18.5     |
+| nll_q2    | 19.2     |
+| nll_q3    | 18.9     |
+| samples   | 8.19e+03 |
+| step      | 0        |
+------------------------
+cuda:1
+cuda:2
+cuda:3
+eval on validation set
+---------------------------
+| eval_loss    | 0.841    |
+| eval_loss_q0 | 0.837    |
+| eval_loss_q1 | 0.843    |
+| eval_loss_q2 | 0.836    |
+| eval_loss_q3 | 0.851    |
+| eval_mse     | 0.841    |
+| eval_mse_q0  | 0.837    |
+| eval_mse_q1  | 0.843    |
+| eval_mse_q2  | 0.836    |
+| eval_mse_q3  | 0.851    |
+| eval_nll     | 10.4     |
+| eval_nll_q0  | 10.8     |
+| eval_nll_q1  | 10.8     |
+| eval_nll_q2  | 9.81     |
+| eval_nll_q3  | 10.6     |
+---------------------------
+eval on validation set
+eval on validation set
+eval on validation set
+------------------------
+| grad_norm | 10.7     |
+| loss      | 0.603    |
+| loss_q0   | 0.601    |
+| loss_q1   | 0.605    |
+| loss_q2   | 0.605    |
+| loss_q3   | 0.601    |
+| mse       | 0.603    |
+| mse_q0    | 0.601    |
+| mse_q1    | 0.605    |
+| mse_q2    | 0.605    |
+| mse_q3    | 0.601    |
+| nll       | 27.6     |
+| nll_q0    | 27.5     |
+| nll_q1    | 27.9     |
+| nll_q2    | 27.8     |
+| nll_q3    | 27.3     |
+| samples   | 1.72e+05 |
+| step      | 20       |
+------------------------
+------------------------
+| grad_norm | 2.67     |
+| loss      | 0.561    |
+| loss_q0   | 0.562    |
+| loss_q1   | 0.56     |
+| loss_q2   | 0.56     |
+| loss_q3   | 0.56     |
+| mse       | 0.561    |
+| mse_q0    | 0.562    |
+| mse_q1    | 0.56     |
+| mse_q2    | 0.56     |
+| mse_q3    | 0.56     |
+| nll       | 31.5     |
+| nll_q0    | 31.6     |
+| nll_q1    | 31.4     |
+| nll_q2    | 31.6     |
+| nll_q3    | 31.5     |
+| samples   | 3.36e+05 |
+| step      | 40       |
+------------------------
+------------------------
+| grad_norm | 1.35     |
+| loss      | 0.557    |
+| loss_q0   | 0.56     |
+| loss_q1   | 0.558    |
+| loss_q2   | 0.558    |
+| loss_q3   | 0.553    |
+| mse       | 0.557    |
+| mse_q0    | 0.56     |
+| mse_q1    | 0.558    |
+| mse_q2    | 0.558    |
+| mse_q3    | 0.553    |
+| nll       | 31.4     |
+| nll_q0    | 31.6     |
+| nll_q1    | 31.5     |
+| nll_q2    | 31.5     |
+| nll_q3    | 31.2     |
+| samples   | 5e+05    |
+| step      | 60       |
+------------------------
+------------------------
+| grad_norm | 9.86     |
+| loss      | 0.563    |
+| loss_q0   | 0.561    |
+| loss_q1   | 0.562    |
+| loss_q2   | 0.564    |
+| loss_q3   | 0.566    |
+| mse       | 0.563    |
+| mse_q0    | 0.561    |
+| mse_q1    | 0.562    |
+| mse_q2    | 0.564    |
+| mse_q3    | 0.566    |
+| nll       | 31.4     |
+| nll_q0    | 31.6     |
+| nll_q1    | 31.6     |
+| nll_q2    | 31.6     |
+| nll_q3    | 30.9     |
+| samples   | 6.64e+05 |
+| step      | 80       |
+------------------------
+------------------------
+| grad_norm | 8.62     |
+| loss      | 0.565    |
+| loss_q0   | 0.564    |
+| loss_q1   | 0.566    |
+| loss_q2   | 0.564    |
+| loss_q3   | 0.565    |
+| mse       | 0.565    |
+| mse_q0    | 0.564    |
+| mse_q1    | 0.566    |
+| mse_q2    | 0.564    |
+| mse_q3    | 0.565    |
+| nll       | 31.1     |
+| nll_q0    | 31       |
+| nll_q1    | 31.2     |
+| nll_q2    | 30.8     |
+| nll_q3    | 31.4     |
+| samples   | 8.27e+05 |
+| step      | 100      |
+------------------------
+------------------------
+| grad_norm | 2.96     |
+| loss      | 0.553    |
+| loss_q0   | 0.555    |
+| loss_q1   | 0.554    |
+| loss_q2   | 0.55     |
+| loss_q3   | 0.554    |
+| mse       | 0.553    |
+| mse_q0    | 0.555    |
+| mse_q1    | 0.554    |
+| mse_q2    | 0.55     |
+| mse_q3    | 0.554    |
+| nll       | 31.1     |
+| nll_q0    | 31.4     |
+| nll_q1    | 31.2     |
+| nll_q2    | 30.6     |
+| nll_q3    | 31.3     |
+| samples   | 9.91e+05 |
+| step      | 120      |
+------------------------
+------------------------
+| grad_norm | 1.38     |
+| loss      | 0.55     |
+| loss_q0   | 0.55     |
+| loss_q1   | 0.548    |
+| loss_q2   | 0.549    |
+| loss_q3   | 0.552    |
+| mse       | 0.55     |
+| mse_q0    | 0.55     |
+| mse_q1    | 0.548    |
+| mse_q2    | 0.549    |
+| mse_q3    | 0.552    |
+| nll       | 31       |
+| nll_q0    | 31       |
+| nll_q1    | 30.9     |
+| nll_q2    | 30.9     |
+| nll_q3    | 31.3     |
+| samples   | 1.16e+06 |
+| step      | 140      |
+------------------------
+------------------------
+| grad_norm | 0.969    |
+| loss      | 0.548    |
+| loss_q0   | 0.546    |
+| loss_q1   | 0.548    |
+| loss_q2   | 0.549    |
+| loss_q3   | 0.547    |
+| mse       | 0.548    |
+| mse_q0    | 0.546    |
+| mse_q1    | 0.548    |
+| mse_q2    | 0.549    |
+| mse_q3    | 0.547    |
+| nll       | 30.9     |
+| nll_q0    | 30.7     |
+| nll_q1    | 30.9     |
+| nll_q2    | 31.1     |
+| nll_q3    | 30.8     |
+| samples   | 1.32e+06 |
+| step      | 160      |
+------------------------
+------------------------
+| grad_norm | 0.908    |
+| loss      | 0.546    |
+| loss_q0   | 0.544    |
+| loss_q1   | 0.547    |
+| loss_q2   | 0.545    |
+| loss_q3   | 0.548    |
+| mse       | 0.546    |
+| mse_q0    | 0.544    |
+| mse_q1    | 0.547    |
+| mse_q2    | 0.545    |
+| mse_q3    | 0.548    |
+| nll       | 30.8     |
+| nll_q0    | 30.6     |
+| nll_q1    | 30.9     |
+| nll_q2    | 30.6     |
+| nll_q3    | 31       |
+| samples   | 1.48e+06 |
+| step      | 180      |
+------------------------
+------------------------
+| grad_norm | 0.896    |
+| loss      | 0.545    |
+| loss_q0   | 0.548    |
+| loss_q1   | 0.545    |
+| loss_q2   | 0.542    |
+| loss_q3   | 0.544    |
+| mse       | 0.545    |
+| mse_q0    | 0.548    |
+| mse_q1    | 0.545    |
+| mse_q2    | 0.542    |
+| mse_q3    | 0.544    |
+| nll       | 30.7     |
+| nll_q0    | 31.1     |
+| nll_q1    | 30.7     |
+| nll_q2    | 30.5     |
+| nll_q3    | 30.6     |
+| samples   | 1.65e+06 |
+| step      | 200      |
+------------------------
+------------------------
+| grad_norm | 0.896    |
+| loss      | 0.543    |
+| loss_q0   | 0.547    |
+| loss_q1   | 0.543    |
+| loss_q2   | 0.541    |
+| loss_q3   | 0.541    |
+| mse       | 0.543    |
+| mse_q0    | 0.547    |
+| mse_q1    | 0.543    |
+| mse_q2    | 0.541    |
+| mse_q3    | 0.541    |
+| nll       | 30.7     |
+| nll_q0    | 30.9     |
+| nll_q1    | 30.6     |
+| nll_q2    | 30.6     |
+| nll_q3    | 30.5     |
+| samples   | 1.81e+06 |
+| step      | 220      |
+------------------------
+------------------------
+| grad_norm | 0.891    |
+| loss      | 0.539    |
+| loss_q0   | 0.537    |
+| loss_q1   | 0.543    |
+| loss_q2   | 0.536    |
+| loss_q3   | 0.541    |
+| mse       | 0.539    |
+| mse_q0    | 0.537    |
+| mse_q1    | 0.543    |
+| mse_q2    | 0.536    |
+| mse_q3    | 0.541    |
+| nll       | 30.4     |
+| nll_q0    | 30.3     |
+| nll_q1    | 30.9     |
+| nll_q2    | 29.8     |
+| nll_q3    | 30.8     |
+| samples   | 1.97e+06 |
+| step      | 240      |
+------------------------
+------------------------
+| grad_norm | 0.889    |
+| loss      | 0.538    |
+| loss_q0   | 0.54     |
+| loss_q1   | 0.533    |
+| loss_q2   | 0.538    |
+| loss_q3   | 0.541    |
+| mse       | 0.538    |
+| mse_q0    | 0.54     |
+| mse_q1    | 0.533    |
+| mse_q2    | 0.538    |
+| mse_q3    | 0.541    |
+| nll       | 30.4     |
+| nll_q0    | 30.3     |
+| nll_q1    | 30       |
+| nll_q2    | 30.4     |
+| nll_q3    | 30.7     |
+| samples   | 2.14e+06 |
+| step      | 260      |
+------------------------
+------------------------
+| grad_norm | 0.893    |
+| loss      | 0.538    |
+| loss_q0   | 0.54     |
+| loss_q1   | 0.538    |
+| loss_q2   | 0.534    |
+| loss_q3   | 0.539    |
+| mse       | 0.538    |
+| mse_q0    | 0.54     |
+| mse_q1    | 0.538    |
+| mse_q2    | 0.534    |
+| mse_q3    | 0.539    |
+| nll       | 30.4     |
+| nll_q0    | 30.6     |
+| nll_q1    | 30.2     |
+| nll_q2    | 30       |
+| nll_q3    | 30.6     |
+| samples   | 2.3e+06  |
+| step      | 280      |
+------------------------
+------------------------
+| grad_norm | 0.888    |
+| loss      | 0.535    |
+| loss_q0   | 0.537    |
+| loss_q1   | 0.534    |
+| loss_q2   | 0.533    |
+| loss_q3   | 0.535    |
+| mse       | 0.535    |
+| mse_q0    | 0.537    |
+| mse_q1    | 0.534    |
+| mse_q2    | 0.533    |
+| mse_q3    | 0.535    |
+| nll       | 30.2     |
+| nll_q0    | 30.5     |
+| nll_q1    | 30       |
+| nll_q2    | 30.1     |
+| nll_q3    | 30.1     |
+| samples   | 2.47e+06 |
+| step      | 300      |
+------------------------
+------------------------
+| grad_norm | 0.889    |
+| loss      | 0.533    |
+| loss_q0   | 0.531    |
+| loss_q1   | 0.532    |
+| loss_q2   | 0.539    |
+| loss_q3   | 0.531    |
+| mse       | 0.533    |
+| mse_q0    | 0.531    |
+| mse_q1    | 0.532    |
+| mse_q2    | 0.539    |
+| mse_q3    | 0.531    |
+| nll       | 30.1     |
+| nll_q0    | 29.9     |
+| nll_q1    | 30.1     |
+| nll_q2    | 30.7     |
+| nll_q3    | 29.7     |
+| samples   | 2.63e+06 |
+| step      | 320      |
+------------------------

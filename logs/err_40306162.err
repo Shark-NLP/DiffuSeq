@@ -1,0 +1,245 @@
+Traceback (most recent call last):
+  File "/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py", line 225, in <module>
+    main()
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py", line 86, in main
+    data_valid = load_data_text(
+                 ^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/diffuseq/text_datasets.py", line 40, in load_data_text
+    training_data = get_corpus(data_args, seq_len, split=split, loaded_vocab=loaded_vocab)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/diffuseq/text_datasets.py", line 177, in get_corpus
+    with open(path, 'r') as f_reader:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/gpfs/scratch/ad6489/thesis/DiffuSeq/datasets/QQP/test.jsonl'
+[2023-11-22 13:31:25,891] torch.distributed.elastic.multiprocessing.api: [ERROR] failed (exitcode: 1) local_rank: 0 (pid: 1648797) of binary: /ext3/miniconda3/bin/python
+Traceback (most recent call last):
+  File "/ext3/miniconda3/bin/torchrun", line 33, in <module>
+    sys.exit(load_entry_point('torch==2.1.0', 'console_scripts', 'torchrun')())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 346, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/run.py", line 806, in main
+    run(args)
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/run.py", line 797, in run
+    elastic_launch(
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 134, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 264, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2023-11-22_13:31:25
+  host      : gr033.hpc.nyu.edu
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1648797)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py", line 225, in <module>
+    main()
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py", line 86, in main
+    data_valid = load_data_text(
+                 ^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/diffuseq/text_datasets.py", line 40, in load_data_text
+    training_data = get_corpus(data_args, seq_len, split=split, loaded_vocab=loaded_vocab)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/diffuseq/text_datasets.py", line 177, in get_corpus
+    with open(path, 'r') as f_reader:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/gpfs/scratch/ad6489/thesis/DiffuSeq/datasets/QQP/test.jsonl'
+[2023-11-22 13:31:37,587] torch.distributed.elastic.multiprocessing.api: [ERROR] failed (exitcode: 1) local_rank: 0 (pid: 1648879) of binary: /ext3/miniconda3/bin/python
+Traceback (most recent call last):
+  File "/ext3/miniconda3/bin/torchrun", line 33, in <module>
+    sys.exit(load_entry_point('torch==2.1.0', 'console_scripts', 'torchrun')())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 346, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/run.py", line 806, in main
+    run(args)
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/run.py", line 797, in run
+    elastic_launch(
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 134, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 264, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2023-11-22_13:31:37
+  host      : gr033.hpc.nyu.edu
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1648879)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py", line 225, in <module>
+    main()
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py", line 86, in main
+    data_valid = load_data_text(
+                 ^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/diffuseq/text_datasets.py", line 40, in load_data_text
+    training_data = get_corpus(data_args, seq_len, split=split, loaded_vocab=loaded_vocab)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/diffuseq/text_datasets.py", line 177, in get_corpus
+    with open(path, 'r') as f_reader:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/gpfs/scratch/ad6489/thesis/DiffuSeq/datasets/QQP/test.jsonl'
+[2023-11-22 13:31:49,279] torch.distributed.elastic.multiprocessing.api: [ERROR] failed (exitcode: 1) local_rank: 0 (pid: 1648953) of binary: /ext3/miniconda3/bin/python
+Traceback (most recent call last):
+  File "/ext3/miniconda3/bin/torchrun", line 33, in <module>
+    sys.exit(load_entry_point('torch==2.1.0', 'console_scripts', 'torchrun')())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 346, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/run.py", line 806, in main
+    run(args)
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/run.py", line 797, in run
+    elastic_launch(
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 134, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 264, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2023-11-22_13:31:49
+  host      : gr033.hpc.nyu.edu
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1648953)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py", line 225, in <module>
+    main()
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py", line 86, in main
+    data_valid = load_data_text(
+                 ^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/diffuseq/text_datasets.py", line 40, in load_data_text
+    training_data = get_corpus(data_args, seq_len, split=split, loaded_vocab=loaded_vocab)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/diffuseq/text_datasets.py", line 177, in get_corpus
+    with open(path, 'r') as f_reader:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/gpfs/scratch/ad6489/thesis/DiffuSeq/datasets/QQP/test.jsonl'
+[2023-11-22 13:32:00,947] torch.distributed.elastic.multiprocessing.api: [ERROR] failed (exitcode: 1) local_rank: 0 (pid: 1649059) of binary: /ext3/miniconda3/bin/python
+Traceback (most recent call last):
+  File "/ext3/miniconda3/bin/torchrun", line 33, in <module>
+    sys.exit(load_entry_point('torch==2.1.0', 'console_scripts', 'torchrun')())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 346, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/run.py", line 806, in main
+    run(args)
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/run.py", line 797, in run
+    elastic_launch(
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 134, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 264, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2023-11-22_13:32:00
+  host      : gr033.hpc.nyu.edu
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1649059)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+Traceback (most recent call last):
+  File "/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py", line 225, in <module>
+    main()
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py", line 86, in main
+    data_valid = load_data_text(
+                 ^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/diffuseq/text_datasets.py", line 40, in load_data_text
+    training_data = get_corpus(data_args, seq_len, split=split, loaded_vocab=loaded_vocab)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/scratch/ad6489/thesis/DiffuSeq/diffuseq/text_datasets.py", line 177, in get_corpus
+    with open(path, 'r') as f_reader:
+         ^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/gpfs/scratch/ad6489/thesis/DiffuSeq/datasets/QQP/test.jsonl'
+[2023-11-22 13:32:12,636] torch.distributed.elastic.multiprocessing.api: [ERROR] failed (exitcode: 1) local_rank: 0 (pid: 1649148) of binary: /ext3/miniconda3/bin/python
+Traceback (most recent call last):
+  File "/ext3/miniconda3/bin/torchrun", line 33, in <module>
+    sys.exit(load_entry_point('torch==2.1.0', 'console_scripts', 'torchrun')())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 346, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/run.py", line 806, in main
+    run(args)
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/run.py", line 797, in run
+    elastic_launch(
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 134, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ext3/miniconda3/lib/python3.11/site-packages/torch/distributed/launcher/api.py", line 264, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/scratch/ad6489/thesis/DiffuSeq/sample_seq2seq.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2023-11-22_13:32:12
+  host      : gr033.hpc.nyu.edu
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 1649148)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

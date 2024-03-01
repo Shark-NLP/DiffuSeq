@@ -1,0 +1,122 @@
+generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231116-03:15:28/ema_0.9999_050000.pt.samples/seed101_step0.json
+calculating scores...
+computing bert embedding.
+computing greedy matching.
+done in 14.14 seconds, 176.75 sentences/sec
+******************************
+avg BLEU score 0.19620588455018806
+avg ROUGE-L score 0.5442114612072706
+avg berscore tensor(0.8069)
+avg dist1 score 0.9678943882531439
+avg len 11.2612
+generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231116-03:15:28/ema_0.9999_050000.pt.samples/seed102_step0.json
+calculating scores...
+computing bert embedding.
+computing greedy matching.
+done in 12.24 seconds, 204.27 sentences/sec
+******************************
+avg BLEU score 0.19494818798609734
+avg ROUGE-L score 0.5433607289403677
+avg berscore tensor(0.8066)
+avg dist1 score 0.966054276325703
+avg len 11.2528
+generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231116-03:15:28/ema_0.9999_050000.pt.samples/seed103_step0.json
+calculating scores...
+computing bert embedding.
+computing greedy matching.
+done in 12.34 seconds, 202.52 sentences/sec
+******************************
+avg BLEU score 0.20137084588038837
+avg ROUGE-L score 0.5478528355464339
+avg berscore tensor(0.8102)
+avg dist1 score 0.9672624523771046
+avg len 11.2012
+generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231116-03:15:28/ema_0.9999_050000.pt.samples/seed104_step0.json
+calculating scores...
+computing bert embedding.
+computing greedy matching.
+done in 12.66 seconds, 197.45 sentences/sec
+******************************
+avg BLEU score 0.19278127045418395
+avg ROUGE-L score 0.5405749897301197
+avg berscore tensor(0.8067)
+avg dist1 score 0.9676251167348673
+avg len 11.2516
+generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231116-03:15:28/ema_0.9999_050000.pt.samples/seed105_step0.json
+calculating scores...
+computing bert embedding.
+computing greedy matching.
+done in 12.57 seconds, 198.86 sentences/sec
+******************************
+avg BLEU score 0.19930461123246465
+avg ROUGE-L score 0.5473363387152552
+avg berscore tensor(0.8093)
+avg dist1 score 0.9681131272294864
+avg len 11.2688
+generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231116-03:15:28/ema_0.9999_050000.pt.samples/seed106_step0.json
+calculating scores...
+computing bert embedding.
+computing greedy matching.
+done in 12.42 seconds, 201.29 sentences/sec
+******************************
+avg BLEU score 0.19673136958529977
+avg ROUGE-L score 0.5437894449561834
+avg berscore tensor(0.8061)
+avg dist1 score 0.9669350449890775
+avg len 11.274
+generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231116-03:15:28/ema_0.9999_050000.pt.samples/seed107_step0.json
+calculating scores...
+computing bert embedding.
+computing greedy matching.
+done in 12.44 seconds, 201.00 sentences/sec
+******************************
+avg BLEU score 0.19342866865573533
+avg ROUGE-L score 0.5442777991235256
+avg berscore tensor(0.8064)
+avg dist1 score 0.9661392598819152
+avg len 11.2276
+generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231116-03:15:28/ema_0.9999_050000.pt.samples/seed108_step0.json
+calculating scores...
+computing bert embedding.
+computing greedy matching.
+done in 12.37 seconds, 202.07 sentences/sec
+******************************
+avg BLEU score 0.20060453074126344
+avg ROUGE-L score 0.5455814186125993
+avg berscore tensor(0.8073)
+avg dist1 score 0.9659619679145002
+avg len 11.2308
+generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231116-03:15:28/ema_0.9999_050000.pt.samples/seed109_step0.json
+calculating scores...
+computing bert embedding.
+computing greedy matching.
+done in 12.50 seconds, 200.01 sentences/sec
+******************************
+avg BLEU score 0.19779439897781637
+avg ROUGE-L score 0.5463058876365423
+avg berscore tensor(0.8082)
+avg dist1 score 0.9672690379341177
+avg len 11.2732
+generation_outputs/diffuseq_qqp_h128_lr0.0001_t2000_sqrt_lossaware_seed102_test-qqp20231116-03:15:28/ema_0.9999_050000.pt.samples/seed110_step0.json
+calculating scores...
+computing bert embedding.
+computing greedy matching.
+done in 12.58 seconds, 198.69 sentences/sec
+******************************
+avg BLEU score 0.19708399147198108
+avg ROUGE-L score 0.5439278408721089
+avg berscore tensor(0.8072)
+avg dist1 score 0.9661171591620663
+avg len 11.2716
+******************************
+MBR...
+******************************
+calculating scores...
+computing bert embedding.
+computing greedy matching.
+done in 12.31 seconds, 203.06 sentences/sec
+******************************
+avg BLEU score 0.22922761059999194
+avg ROUGE-l score 0.5788124620959163
+avg berscore tensor(0.8319)
+avg dist1 score 0.9738895309626525

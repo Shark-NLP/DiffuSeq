@@ -1,0 +1,1 @@
+FATAL:   while loading overlay images: failed to open overlay image /scratch/ad6489/thesis/DiffuSeq/overlay_img2: failed to retrieve path for /scratch/ad6489/thesis/DiffuSeq/overlay_img2: lstat /scratch/ad6489/thesis/DiffuSeq/overlay_img2: no such file or directory
